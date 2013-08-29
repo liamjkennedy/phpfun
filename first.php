@@ -5,26 +5,50 @@
 </head>
 <body>
 
-	<form action="first.php" method="post">
-		<fieldset><legend>Enter your information in the form below:</legend>
-			<p><b>Name:</b> <input type="text" name="name" size="20" maxlength="40"></p>
-			<p><b>Email Address:</b> <input type="text" name="email" size="40" maxlength="60"></p>
-			<p><b>Gender:</b><input type="radio" name="gender" value="M" /> Male <input type="radio" name="gender" value="F" /> Female </p>
-			<p><b>Age:</b><select name="age"><option value="0-29">Under 30</option><option value="30-60">Between 30 and 60</option><option value="60+">Over 60</option></select></p>
-			<p><b>Comments:</b><textarea name="comments" rows="3" cols="40"></textarea></p>
-		</fieldset>
-		<div align="center"><input type="submit" name="submit" value="Submit My Information" /></div>
-	</form>
-
 <?php
-
-	$name = $_REQUEST['name'];
-	$email = $_REQUEST['email'];
-	$comments = $_REQUEST['comments'];
-	$age = $_REQUEST['age'];
-	$gender = $_REQUEST['gender'];
 	
-	echo "<p>Thank you, <b>$name</b>, for the following comments:<br /><tt>\"$comments\"</tt></p><p>We will reply to you at <i>$email</i>.</p><br /><p>You've told us you were born more or less <b>$age</b> years ago and the binary gender you identify as begins with the letter <b>$gender</b>. THANK <i>YOU!</i>";
+	if (!empty($_REQUEST['name'])) {
+		$name = stripslashes($_REQUEST['name']);
+	} else {
+		$name = NULL;
+		echo '<p><font color="red">You forgot to enter your name!</font></p>';
+	}
+	
+	if (!empty($_REQUEST['email'])) {
+		$email = $_REQUEST['email'];
+	} else {
+		$email = NULL;
+		echo '<p><font color="red">You forgot to enter your email address!</font></p>';
+	}
+	
+	if (!empty($_REQUEST['comments'])) {
+		$comments = stripslashes($_REQUEST['comments']);
+	} else {
+		$email = NULL;
+		echo '<p><font color="red">You forgot to enter your comments!</font></p>';
+	}
+	
+	if (isset($_REQUEST['gender'])) {
+		$gender = $_REQUEST['gender'];
+		if ($gender == 'M') {
+			$message = "<p><b>Have a good day, <i>SIR!<i> *wink wink*</b></p>";
+		} else if ($gender == 'F') {
+			$message = "<p><b>Have a good day, <i>MA'AM!<i> *wink wink*</b></p>";
+		} else {
+			$message = NULL;
+			echo '<p><font color="red">Gender should be either "M" or "F"! Zer vill be order in mein PHP forms! Non-binary gender identification is inferior!</font></p>';
+		}
+	} else {
+		$gender = NULL;
+		echo '<p><font color="red">You forgot to select your gender! No you don\'t have any other options, where do you think we are? Amsterdam?</font></p>';
+	}
+	
+	if ($name && $email && $gender && $comments) {
+		echo "<p>Thank you, <b>$name</b>, for the following comments:<br /><tt>\"$comments\"</tt></p><p>We will reply to you at <i>$email</i>.</p><br />";
+		echo $message;
+	} else {
+		echo '<p><font color="red">Don\'t take the ****. Go back and do it again.</font></p>';
+	}
 	
 ?>
 	
